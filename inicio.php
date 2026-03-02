@@ -82,41 +82,50 @@ include __DIR__ . '/src/data.php';
         </div>
     </nav>
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex overflow-x-auto gap-6 mb-8 pb-4 fade-in-up delay-1 custom-scrollbar snap-x snap-mandatory">
-            <div class="min-w-[280px] md:min-w-[320px] shrink-0 snap-start bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 relative overflow-hidden group hover:border-slate-600 transition-colors">
-                <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
-                <div class="flex items-center gap-4">
-                    <div class="p-3 bg-slate-900/50 rounded-xl border border-slate-700 text-blue-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex overflow-x-auto gap-4 mb-8 pb-4 fade-in-up delay-1 custom-scrollbar snap-x snap-mandatory">
+            <div class="min-w-[240px] md:min-w-[280px] shrink-0 snap-start bg-slate-800/40 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 relative overflow-hidden group hover:border-blue-500/50 transition-all duration-300 shadow-lg">
+                <div class="absolute -right-4 -top-4 w-20 h-20 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-all"></div>
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-blue-500/10 rounded-xl text-blue-400 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
                         </svg>
                     </div>
                     <div>
-                        <p class="text-sm font-medium text-slate-400">Volumen Procesado</p>
-                        <h3 class="text-3xl font-extrabold text-white mt-1"><span id="totalRegistros"><?= $total_registros ?></span> <span class="text-base font-medium text-slate-500">registros</span></h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Volumen Procesado</p>
+                        <h3 class="text-xl font-bold text-white tracking-tight mt-0.5">
+                            <span id="totalRegistros"><?= $total_registros ?></span>
+                            <span class="text-xs font-normal text-slate-500 ml-1">registros</span>
+                        </h3>
                     </div>
                 </div>
             </div>
+
             <?php foreach ($location_stats as $stat): ?>
-                <div class="min-w-[280px] md:min-w-[320px] shrink-0 snap-start bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-5 relative overflow-hidden group hover:border-slate-600 transition-colors flex flex-col justify-between">
-                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="p-2.5 bg-slate-900/50 rounded-xl border border-slate-700 text-cyan-400 shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
+                <div class="min-w-[300px] md:min-w-[340px] shrink-0 snap-start bg-slate-800/40 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 relative overflow-hidden group hover:border-cyan-500/50 transition-all duration-300 shadow-lg flex flex-col">
+                    <div class="absolute -right-4 -top-4 w-20 h-20 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition-all"></div>
+
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="p-2 bg-cyan-500/10 rounded-lg text-cyan-400 shrink-0 group-hover:rotate-12 transition-transform duration-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-sm font-bold text-white truncate leading-tight"><?= htmlspecialchars($stat['NombreLugar']) ?></h3>
                         </div>
-                        <h3 class="text-lg font-bold text-white truncate"><?= htmlspecialchars($stat['NombreLugar']) ?></h3>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 mt-auto">
-                        <div>
-                            <p class="text-xs font-medium text-slate-400">Promedio</p>
-                            <p class="text-xl font-extrabold text-white"><?= $stat['Promedio'] ?? '--' ?> <span class="text-xs font-medium text-slate-500">°C</span></p>
+
+                    <div class="flex items-center justify-between mt-auto pt-2 border-t border-slate-700/30">
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase">Prom:</span>
+                            <span class="text-base font-bold text-white"><?= $stat['Promedio'] ?? '--' ?><span class="text-[10px] ml-0.5 text-slate-400">°C</span></span>
                         </div>
-                        <div>
-                            <p class="text-xs font-medium text-slate-400">Pico Max</p>
-                            <p class="text-xl font-extrabold text-rose-400"><?= $stat['MaxTemp'] ?? '--' ?> <span class="text-xs font-medium text-slate-500">°C</span></p>
+                        <div class="h-4 w-px bg-slate-700/50"></div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase">Max:</span>
+                            <span class="text-base font-bold text-rose-400"><?= $stat['MaxTemp'] ?? '--' ?><span class="text-[10px] ml-0.5 text-slate-500">°C</span></span>
                         </div>
                     </div>
                 </div>
