@@ -1,0 +1,7 @@
+/tailwindcss.exe
+/node_modules/
+/vendor/
+/.env
+*.log
+*.sqlite
+.DS_Store
