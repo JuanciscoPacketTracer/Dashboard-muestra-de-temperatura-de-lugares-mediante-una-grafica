@@ -43,6 +43,24 @@ include __DIR__ . '/src/data.php';
                 transform: translateY(0);
             }
         }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 14px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.4);
+            border-radius: 14px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(56, 189, 248, 0.8);
+        }
     </style>
 </head>
 
@@ -64,8 +82,8 @@ include __DIR__ . '/src/data.php';
         </div>
     </nav>
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 fade-in-up delay-1">
-            <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 relative overflow-hidden group hover:border-slate-600 transition-colors">
+        <div class="flex overflow-x-auto gap-6 mb-8 pb-4 fade-in-up delay-1 custom-scrollbar snap-x snap-mandatory">
+            <div class="min-w-[280px] md:min-w-[320px] shrink-0 snap-start bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 relative overflow-hidden group hover:border-slate-600 transition-colors">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
                 <div class="flex items-center gap-4">
                     <div class="p-3 bg-slate-900/50 rounded-xl border border-slate-700 text-blue-400">
@@ -75,38 +93,34 @@ include __DIR__ . '/src/data.php';
                     </div>
                     <div>
                         <p class="text-sm font-medium text-slate-400">Volumen Procesado</p>
-                        <h3 class="text-3xl font-extrabold text-white mt-1"><?= $total_registros ?> <span class="text-base font-medium text-slate-500">registros</span></h3>
+                        <h3 class="text-3xl font-extrabold text-white mt-1"><span id="totalRegistros"><?= $total_registros ?></span> <span class="text-base font-medium text-slate-500">registros</span></h3>
                     </div>
                 </div>
             </div>
-            <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 relative overflow-hidden group hover:border-slate-600 transition-colors">
-                <div class="absolute -right-6 -top-6 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
-                <div class="flex items-center gap-4">
-                    <div class="p-3 bg-slate-900/50 rounded-xl border border-slate-700 text-cyan-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a6 6 0 1 0 5 0z" />
-                        </svg>
+            <?php foreach ($location_stats as $stat): ?>
+                <div class="min-w-[280px] md:min-w-[320px] shrink-0 snap-start bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-5 relative overflow-hidden group hover:border-slate-600 transition-colors flex flex-col justify-between">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2.5 bg-slate-900/50 rounded-xl border border-slate-700 text-cyan-400 shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white truncate"><?= htmlspecialchars($stat['NombreLugar']) ?></h3>
                     </div>
-                    <div>
-                        <p class="text-sm font-medium text-slate-400">Promedio Global Histórico</p>
-                        <h3 class="text-3xl font-extrabold text-white mt-1"><?= $promedio_total ?> <span class="text-base font-medium text-slate-500">°C</span></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 relative overflow-hidden group hover:border-slate-600 transition-colors">
-                <div class="absolute -right-6 -top-6 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl group-hover:bg-rose-500/20 transition-all"></div>
-                <div class="flex items-center gap-4">
-                    <div class="p-3 bg-slate-900/50 rounded-xl border border-slate-700 text-rose-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-slate-400">Pico de Temperatura (Max)</p>
-                        <h3 class="text-3xl font-extrabold text-white mt-1"><?= $max_temp ?> <span class="text-base font-medium text-slate-500">°C</span></h3>
+                    <div class="grid grid-cols-2 gap-4 mt-auto">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Promedio</p>
+                            <p class="text-xl font-extrabold text-white"><?= $stat['Promedio'] ?? '--' ?> <span class="text-xs font-medium text-slate-500">°C</span></p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Pico Max</p>
+                            <p class="text-xl font-extrabold text-rose-400"><?= $stat['MaxTemp'] ?? '--' ?> <span class="text-xs font-medium text-slate-500">°C</span></p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
         <div class="bg-slate-800/80 backdrop-blur-lg border border-slate-700 rounded-3xl p-6 md:p-8 shadow-2xl fade-in-up delay-2">
             <div class="flex items-center justify-between mb-6">

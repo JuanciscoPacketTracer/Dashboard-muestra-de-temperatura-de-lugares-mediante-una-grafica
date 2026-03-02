@@ -108,6 +108,7 @@ $(document).ready(function () {
                         chart.updateOptions({ tooltip: { x: { format: 'HH:mm:ss dd MMM yyyy' } } });
 
                         if (res.latest) latestTime = res.latest;
+                        if (res.totalRegistros !== undefined) $('#totalRegistros').text(res.totalRegistros);
                         hideLoading(true);
 
                         pollInterval = setInterval(pollNewData, 1000);
@@ -134,6 +135,10 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (res) {
                 if (isHovering) return;
+
+                if (res.totalRegistros !== undefined) {
+                    $('#totalRegistros').text(res.totalRegistros);
+                }
 
                 if (res.series && res.series.length > 0 && res.latest && res.latest > latestTime) {
                     latestTime = res.latest;

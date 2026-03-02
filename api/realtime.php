@@ -91,10 +91,20 @@ foreach ($series as $lugar => $data) {
     $apex_series[] = ['name' => $lugar, 'data' => $data];
 }
 
+$stmt->close();
+
+$sql_count = "SELECT COUNT(*) as Total FROM Temperaturas";
+$res_count = $conn->query($sql_count);
+$total_registros = 0;
+if ($res_count) {
+    $rowCount = $res_count->fetch_assoc();
+    $total_registros = $rowCount ? $rowCount['Total'] : 0;
+}
+
 echo json_encode([
     'series' => $apex_series,
-    'latest' => $latestDate
+    'latest' => $latestDate,
+    'totalRegistros' => number_format((float)$total_registros)
 ]);
 
-$stmt->close();
 $conn->close();

@@ -9,18 +9,29 @@ if ($res_count) {
     $total_registros = $rowCount ? number_format($rowCount['Total']) : '0';
 }
 
-$sql_avg = "SELECT ROUND(AVG(ValorTemperatura), 1) as PromedioTotal FROM Temperaturas";
-$res_avg = $conn->query($sql_avg);
-$promedio_total = '--';
-if ($res_avg) {
-    $rowAvg = $res_avg->fetch_assoc();
-    $promedio_total = $rowAvg ? $rowAvg['PromedioTotal'] : '--';
-}
+$placeholders = implode(',', array_fill(0, count($LOCATION_IDS), '?'));
+$locTypes = str_repeat('i', count($LOCATION_IDS));
 
-$sql_max = "SELECT MAX(ValorTemperatura) as MaxTemp FROM Temperaturas";
-$res_max = $conn->query($sql_max);
-$max_temp = '--';
-if ($res_max) {
-    $rowMax = $res_max->fetch_assoc();
-    $max_temp = $rowMax ? $rowMax['MaxTemp'] : '--';
+$sql_stats = "
+    SELECT 
+        l.NombreLugar, 
+        ROUND(AVG(t.ValorTemperatura), 1) as Promedio, 
+        MAX(t.ValorTemperatura) as MaxTemp 
+    FROM Temperaturas t
+    JOIN Lugares l ON t.Lugares_IdLugar = l.IdLugar
+    WHERE l.IdLugar IN ($placeholders)
+    GROUP BY l.IdLugar, l.NombreLugar
+";
+$stmt_stats = $conn->prepare($sql_stats);
+$location_stats = [];
+
+if ($stmt_stats) {
+    $stmt_stats->bind_param($locTypes, ...$LOCATION_IDS);
+    $stmt_stats->execute();
+    $res_stats = $stmt_stats->get_result();
+
+    while ($row = $res_stats->fetch_assoc()) {
+        $location_stats[] = $row;
+    }
+    $stmt_stats->close();
 }
