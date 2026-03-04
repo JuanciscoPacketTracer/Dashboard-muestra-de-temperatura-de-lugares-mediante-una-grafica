@@ -111,7 +111,7 @@ $(document).ready(function () {
                         if (res.totalRegistros !== undefined) $('#totalRegistros').text(res.totalRegistros);
                         hideLoading(true);
 
-                        pollInterval = setInterval(pollNewData, 1000);
+                        pollInterval = setInterval(pollNewData, 10000);
                     } else {
                         hideLoading(false);
                     }
