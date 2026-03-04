@@ -16,7 +16,8 @@ $sql_stats = "
     SELECT 
         l.NombreLugar, 
         ROUND(AVG(t.ValorTemperatura), 1) as Promedio, 
-        MAX(t.ValorTemperatura) as MaxTemp 
+        MAX(t.ValorTemperatura) as MaxTemp,
+        MIN(t.ValorTemperatura) as MinTemp
     FROM Temperaturas t
     JOIN Lugares l ON t.Lugares_IdLugar = l.IdLugar
     WHERE l.IdLugar IN ($placeholders)

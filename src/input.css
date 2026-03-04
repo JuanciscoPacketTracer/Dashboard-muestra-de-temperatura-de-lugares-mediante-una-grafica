@@ -1,3 +1,96 @@
 @import "tailwindcss";
 
 @source "../**/*.{php,html,js}";
+
+@layer base {
+    :root {
+        --shadow-glow-cyan: 0 0 20px rgba(6, 182, 212, 0.2), 0 0 60px rgba(6, 182, 212, 0.06);
+        --shadow-glow-rose: 0 0 20px rgba(251, 113, 133, 0.2), 0 0 60px rgba(251, 113, 133, 0.06);
+        --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.2), 0 0 60px rgba(59, 130, 246, 0.06);
+        --shadow-glow-emerald: 0 0 20px rgba(52, 211, 153, 0.2), 0 0 60px rgba(52, 211, 153, 0.06);
+        --shadow-glow-violet: 0 0 20px rgba(139, 92, 246, 0.2), 0 0 60px rgba(139, 92, 246, 0.06);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@layer components {
+    .custom-scrollbar::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(30, 41, 59, 0.5);
+        border-radius: 14px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(6, 182, 212, 0.35);
+        border-radius: 14px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(6, 182, 212, 0.7);
+    }
+
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out both;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.25s; }
+    .delay-3 { animation-delay: 0.4s; }
+    .delay-4 { animation-delay: 0.55s; }
+
+    .skeleton-shimmer {
+        background: linear-gradient(
+            90deg,
+            rgba(30, 41, 59, 0.7) 25%,
+            rgba(51, 65, 85, 0.5) 50%,
+            rgba(30, 41, 59, 0.7) 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.8s ease-in-out infinite;
+    }
+
+    .preset-btn-active {
+        background-color: rgba(8, 145, 178, 0.25);
+        color: rgb(103, 232, 249);
+        border-color: rgba(6, 182, 212, 0.45);
+    }
+}
+
+@utility glow-cyan {
+    box-shadow: var(--shadow-glow-cyan);
+}
+
+@utility glow-rose {
+    box-shadow: var(--shadow-glow-rose);
+}
+
+@utility glow-blue {
+    box-shadow: var(--shadow-glow-blue);
+}
+
+@utility glow-emerald {
+    box-shadow: var(--shadow-glow-emerald);
+}
+
+@utility glow-violet {
+    box-shadow: var(--shadow-glow-violet);
+}
