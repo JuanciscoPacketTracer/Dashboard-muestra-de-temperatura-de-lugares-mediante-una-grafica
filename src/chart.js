@@ -250,8 +250,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    // ─── Historic Mode ─────────────────────────────────────────────────
     function loadHistoricData(fromStr, toStr) {
         if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
         showLoading();

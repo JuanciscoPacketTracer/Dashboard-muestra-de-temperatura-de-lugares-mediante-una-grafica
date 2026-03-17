@@ -28,55 +28,59 @@ if ($diffDays <= 2) {
     $granularity = 'day';
 }
 
-$placeholders = implode(',', array_fill(0, count($LOCATION_IDS), '?'));
-$locTypes = str_repeat('i', count($LOCATION_IDS));
-
-$sql = "
-    SELECT 
-        l.NombreLugar, 
-        DATE_FORMAT(t.FechaTemperatura, '$dateFormat') AS Fecha, 
-        ROUND(AVG(t.ValorTemperatura), 1) AS PromedioTemp
-    FROM Temperaturas t
-    JOIN Lugares l ON t.Lugares_IdLugar = l.IdLugar 
-    WHERE l.IdLugar IN ($placeholders)
-      AND t.FechaTemperatura >= ?
-      AND t.FechaTemperatura <= ?
-    GROUP BY l.IdLugar, l.NombreLugar, DATE_FORMAT(t.FechaTemperatura, '$dateFormat')
-    ORDER BY Fecha ASC
-";
-
-$stmt = $conn->prepare($sql);
-if (!$stmt) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Query preparation failed: ' . $conn->error]);
-    $conn->close();
-    exit;
-}
-
-$params = array_merge($LOCATION_IDS, [$fromFull, $toFull]);
-$stmt->bind_param($locTypes . 'ss', ...$params);
-$stmt->execute();
-$resultado = $stmt->get_result();
-
-if (!$resultado) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Query execution failed: ' . $stmt->error]);
-    $stmt->close();
-    $conn->close();
-    exit;
-}
-
 $series = [];
 
-while ($row = $resultado->fetch_assoc()) {
-    $lugar = $row['NombreLugar'];
-    $fecha = $row['Fecha'];
-    $temp  = (float)$row['PromedioTemp'];
+if (!empty($LOCATION_IDS)) {
+    $placeholders = implode(',', array_fill(0, count($LOCATION_IDS), '?'));
+    $locTypes = str_repeat('i', count($LOCATION_IDS));
 
-    if (!isset($series[$lugar])) {
-        $series[$lugar] = [];
+    $sql = "
+        SELECT 
+            l.NombreLugar, 
+            DATE_FORMAT(t.FechaTemperatura, '$dateFormat') AS Fecha, 
+            ROUND(AVG(t.ValorTemperatura), 1) AS PromedioTemp
+        FROM Temperaturas t
+        JOIN Lugares l ON t.Lugares_IdLugar = l.IdLugar 
+        WHERE l.IdLugar IN ($placeholders)
+          AND t.FechaTemperatura >= ?
+          AND t.FechaTemperatura <= ?
+        GROUP BY l.IdLugar, l.NombreLugar, DATE_FORMAT(t.FechaTemperatura, '$dateFormat')
+        ORDER BY Fecha ASC
+    ";
+
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Query preparation failed: ' . $conn->error]);
+        $conn->close();
+        exit;
     }
-    $series[$lugar][] = ['x' => $fecha, 'y' => $temp];
+
+    $params = array_merge($LOCATION_IDS, [$fromFull, $toFull]);
+    $stmt->bind_param($locTypes . 'ss', ...$params);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if (!$resultado) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Query execution failed: ' . $stmt->error]);
+        $stmt->close();
+        $conn->close();
+        exit;
+    }
+
+    while ($row = $resultado->fetch_assoc()) {
+        $lugar = $row['NombreLugar'];
+        $fecha = $row['Fecha'];
+        $temp  = (float)$row['PromedioTemp'];
+
+        if (!isset($series[$lugar])) {
+            $series[$lugar] = [];
+        }
+        $series[$lugar][] = ['x' => $fecha, 'y' => $temp];
+    }
+
+    $stmt->close();
 }
 
 $apex_series = [];
@@ -91,5 +95,4 @@ echo json_encode([
     'to'          => $to
 ]);
 
-$stmt->close();
 $conn->close();
