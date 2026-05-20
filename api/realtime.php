@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: application/json');
+require_once __DIR__ . '/../auth.php';
+roomtemperature_require_login_json();
 require_once __DIR__ . '/../config/database.php';
 
 $since = isset($_GET['since']) ? $_GET['since'] : null;

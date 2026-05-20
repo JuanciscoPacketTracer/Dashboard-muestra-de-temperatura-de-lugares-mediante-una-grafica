@@ -1,6 +1,10 @@
-<?php ob_start();
-session_start();
-include __DIR__ . '/src/data.php';
+<?php
+require_once __DIR__ . '/auth.php';
+roomtemperature_require_login();
+require_once __DIR__ . '/src/data.php';
+
+$currentUser = roomtemperature_session_user();
+$currentUserName = $currentUser['NombreUsuario'] ?? 'Usuario';
 
 function getTempColorClass($temp) {
     if ($temp === null || $temp === '') return 'text-slate-400';
@@ -62,6 +66,29 @@ function getTempBadgeClass($temp) {
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
+                    <a href="registro.php" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50 text-sm text-slate-300 hover:text-white hover:border-cyan-500/40 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9l-6-6m0 0L6 9m6-6v18" />
+                        </svg>
+                        <span>Usuarios</span>
+                    </a>
+                    <a href="registrolugares.php" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50 text-sm text-slate-300 hover:text-white hover:border-cyan-500/40 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>Lugares</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0"></span>
+                        <span class="text-sm text-slate-300"><?= htmlspecialchars($currentUserName) ?></span>
+                    </div>
+                    <a href="logout.php" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50 text-sm text-slate-300 hover:text-white hover:border-cyan-500/40 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span class="hidden sm:inline">Salir</span>
+                    </a>
                     <div id="liveBadge" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[11px] font-bold uppercase tracking-wide transition-all duration-500">
                         <span id="liveDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
                         <span id="liveText" class="hidden sm:inline">DATOS EN VIVO</span>

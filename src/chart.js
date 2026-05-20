@@ -176,6 +176,14 @@ $(document).ready(function () {
         if ($btn) $btn.addClass('preset-btn-active');
     }
 
+    function redirectToLogin(xhr) {
+        if (xhr && xhr.status === 401) {
+            window.location.href = 'login.php';
+            return true;
+        }
+        return false;
+    }
+
     function loadRealtimeData() {
         if (pollInterval) clearInterval(pollInterval);
         latestTime = null;
@@ -210,7 +218,8 @@ $(document).ready(function () {
                     hideLoading(false);
                 }
             },
-            error: function () {
+            error: function (xhr) {
+                if (redirectToLogin(xhr)) return;
                 hideLoading(false);
             }
         });
@@ -247,6 +256,9 @@ $(document).ready(function () {
                         updateLastUpdated(res.latest);
                     }
                 }
+            },
+            error: function (xhr) {
+                if (redirectToLogin(xhr)) return;
             }
         });
     }
@@ -289,7 +301,8 @@ $(document).ready(function () {
                     hideLoading(false);
                 }
             },
-            error: function () {
+            error: function (xhr) {
+                if (redirectToLogin(xhr)) return;
                 hideLoading(false);
             }
         });

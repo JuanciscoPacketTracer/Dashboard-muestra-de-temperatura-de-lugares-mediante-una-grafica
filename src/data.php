@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../auth.php';
+roomtemperature_require_login();
 require_once __DIR__ . '/../config/database.php';
 
 $sql_count = "SELECT COUNT(*) as Total FROM Temperaturas";

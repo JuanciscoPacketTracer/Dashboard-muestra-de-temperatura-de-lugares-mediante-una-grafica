@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: application/json');
+require_once __DIR__ . '/../auth.php';
+roomtemperature_require_login_json();
 require_once __DIR__ . '/../config/database.php';
 
 $from = isset($_GET['from']) ? $_GET['from'] : date('Y-m-d', strtotime('-7 days'));
