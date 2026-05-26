@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "phpmyadmin";
-$password = "rootroot";
+$username = "user23060120";
+$password = "rootroot23060120";
 $dbname = "roomtemperaturedb";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
