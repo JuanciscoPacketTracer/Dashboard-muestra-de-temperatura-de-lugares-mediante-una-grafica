@@ -1,23 +1,19 @@
 <?php
-
 function roomtemperature_start_session(): void
 {
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();
     }
 }
-
 function roomtemperature_pdo(): PDO
 {
     static $pdo = null;
-
     if ($pdo instanceof PDO) {
         return $pdo;
     }
-
     $dsn = 'mysql:host=localhost;dbname=roomtemperaturedb;charset=utf8mb4';
-    $username = 'root';
-    $password = 'rootroot';
+    $username = 'user23060120';
+    $password = 'rootroot23060120';
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -27,16 +23,13 @@ function roomtemperature_pdo(): PDO
     $pdo = new PDO($dsn, $username, $password, $options);
     return $pdo;
 }
-
 function roomtemperature_authenticate_user(string $email, string $password): ?array
 {
     $email = trim($email);
     $password = trim($password);
-
     if ($email === '' || $password === '') {
         return null;
     }
-
     try {
         $pdo = roomtemperature_pdo();
         $stmt = $pdo->prepare(
@@ -53,7 +46,6 @@ function roomtemperature_authenticate_user(string $email, string $password): ?ar
         return null;
     }
 }
-
 function roomtemperature_session_user(): ?array
 {
     roomtemperature_start_session();
@@ -94,10 +86,8 @@ function roomtemperature_clear_session(): void
             $params['httponly']
         );
     }
-
     session_destroy();
 }
-
 function roomtemperature_require_login(): void
 {
     if (roomtemperature_session_user() === null) {
@@ -105,7 +95,6 @@ function roomtemperature_require_login(): void
         exit;
     }
 }
-
 function roomtemperature_require_login_json(): void
 {
     if (roomtemperature_session_user() === null) {
