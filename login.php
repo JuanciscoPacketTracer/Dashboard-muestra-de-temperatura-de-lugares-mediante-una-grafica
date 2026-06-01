@@ -14,15 +14,20 @@ $emailValue = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $emailValue = trim($_POST['email'] ?? '');
     $passwordValue = (string)($_POST['password'] ?? '');
+    $dbError = null;
 
-    $user = roomtemperature_authenticate_user($emailValue, $passwordValue);
+    $user = roomtemperature_authenticate_user($emailValue, $passwordValue, $dbError);
     if ($user !== null) {
         roomtemperature_login_user($user);
         header('Location: inicio.php');
         exit;
     }
 
-    $errorMessage = 'Correo o contraseña incorrectos.';
+    if ($dbError !== null && $dbError !== '') {
+        $errorMessage = 'Error de MySQL: ' . $dbError;
+    } else {
+        $errorMessage = 'Correo o contraseña incorrectos.';
+    }
 }
 ?>
 <!doctype html>

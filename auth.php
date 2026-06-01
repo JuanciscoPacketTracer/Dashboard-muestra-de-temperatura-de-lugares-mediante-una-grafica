@@ -23,8 +23,9 @@ function roomtemperature_pdo(): PDO
     $pdo = new PDO($dsn, $username, $password, $options);
     return $pdo;
 }
-function roomtemperature_authenticate_user(string $email, string $password): ?array
+function roomtemperature_authenticate_user(string $email, string $password, ?string &$dbError = null): ?array
 {
+    $dbError = null;
     $email = trim($email);
     $password = trim($password);
     if ($email === '' || $password === '') {
@@ -43,6 +44,7 @@ function roomtemperature_authenticate_user(string $email, string $password): ?ar
 
         return $user ?: null;
     } catch (PDOException $e) {
+        $dbError = $e->getMessage();
         return null;
     }
 }
