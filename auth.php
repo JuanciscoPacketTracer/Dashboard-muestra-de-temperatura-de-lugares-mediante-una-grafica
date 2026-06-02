@@ -32,18 +32,68 @@ function roomtemperature_authenticate_user(string $email, string $password, ?str
         return null;
     }
     try {
-        $pdo = roomtemperature_pdo();
-        $stmt = $pdo->prepare(
+        if (class_exists('PDO')) {
+            $pdoDrivers = PDO::getAvailableDrivers();
+            if (is_array($pdoDrivers) && in_array('mysql', $pdoDrivers, true)) {
+                $pdo = roomtemperature_pdo();
+                $stmt = $pdo->prepare(
+                    'SELECT IdUsuario, NombreUsuario, emailusuario
+                     FROM usuarios
+                     WHERE emailusuario = ? AND passwordusuario = ?
+                     LIMIT 1'
+                );
+                $stmt->execute([$email, $password]);
+                $user = $stmt->fetch();
+
+                return $user ?: null;
+            }
+        }
+
+        require __DIR__ . '/config/database.php';
+
+        if (!isset($conn) || !($conn instanceof mysqli)) {
+            $dbError = 'No se pudo inicializar la conexion a MySQL.';
+            return null;
+        }
+
+        $stmt = $conn->prepare(
             'SELECT IdUsuario, NombreUsuario, emailusuario
              FROM usuarios
              WHERE emailusuario = ? AND passwordusuario = ?
              LIMIT 1'
         );
-        $stmt->execute([$email, $password]);
-        $user = $stmt->fetch();
 
-        return $user ?: null;
-    } catch (PDOException $e) {
+        if (!$stmt) {
+            $dbError = $conn->error;
+            $conn->close();
+            return null;
+        }
+
+        $stmt->bind_param('ss', $email, $password);
+        $stmt->execute();
+
+        $user = null;
+        if (method_exists($stmt, 'get_result')) {
+            $res = $stmt->get_result();
+            if ($res) {
+                $user = $res->fetch_assoc() ?: null;
+            }
+        } else {
+            $stmt->bind_result($idUsuario, $nombreUsuario, $emailUsuario);
+            if ($stmt->fetch()) {
+                $user = [
+                    'IdUsuario' => $idUsuario,
+                    'NombreUsuario' => $nombreUsuario,
+                    'emailusuario' => $emailUsuario,
+                ];
+            }
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        return $user;
+    } catch (Throwable $e) {
         $dbError = $e->getMessage();
         return null;
     }
