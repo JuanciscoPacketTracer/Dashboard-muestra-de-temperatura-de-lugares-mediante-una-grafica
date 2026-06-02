@@ -61,25 +61,35 @@ if (!empty($LOCATION_IDS)) {
     $params = array_merge($LOCATION_IDS, [$fromFull, $toFull]);
     $stmt->bind_param($locTypes . 'ss', ...$params);
     $stmt->execute();
-    $resultado = $stmt->get_result();
+    if (method_exists($stmt, 'get_result')) {
+        $resultado = $stmt->get_result();
 
-    if (!$resultado) {
-        http_response_code(500);
-        echo json_encode(['error' => 'Query execution failed: ' . $stmt->error]);
-        $stmt->close();
-        $conn->close();
-        exit;
-    }
-
-    while ($row = $resultado->fetch_assoc()) {
-        $lugar = $row['NombreLugar'];
-        $fecha = $row['Fecha'];
-        $temp  = (float)$row['PromedioTemp'];
-
-        if (!isset($series[$lugar])) {
-            $series[$lugar] = [];
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Query execution failed: ' . $stmt->error]);
+            $stmt->close();
+            $conn->close();
+            exit;
         }
-        $series[$lugar][] = ['x' => $fecha, 'y' => $temp];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $lugar = $row['NombreLugar'];
+            $fecha = $row['Fecha'];
+            $temp  = (float)$row['PromedioTemp'];
+
+            if (!isset($series[$lugar])) {
+                $series[$lugar] = [];
+            }
+            $series[$lugar][] = ['x' => $fecha, 'y' => $temp];
+        }
+    } else {
+        $stmt->bind_result($lugar, $fecha, $temp);
+        while ($stmt->fetch()) {
+            if (!isset($series[$lugar])) {
+                $series[$lugar] = [];
+            }
+            $series[$lugar][] = ['x' => $fecha, 'y' => (float)$temp];
+        }
     }
 
     $stmt->close();

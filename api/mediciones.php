@@ -60,14 +60,25 @@ if (!$stmtLugar) {
 
 $stmtLugar->bind_param("i", $lugarId);
 $stmtLugar->execute();
-$resLugar = $stmtLugar->get_result();
+if (method_exists($stmtLugar, 'get_result')) {
+    $resLugar = $stmtLugar->get_result();
 
-if (!$resLugar || $resLugar->num_rows === 0) {
-    http_response_code(404);
-    echo json_encode(["error" => "El lugar seleccionado no existe"]);
-    $stmtLugar->close();
-    $conn->close();
-    exit;
+    if (!$resLugar || $resLugar->num_rows === 0) {
+        http_response_code(404);
+        echo json_encode(["error" => "El lugar seleccionado no existe"]);
+        $stmtLugar->close();
+        $conn->close();
+        exit;
+    }
+} else {
+    $stmtLugar->bind_result($nombreLugar);
+    if (!$stmtLugar->fetch()) {
+        http_response_code(404);
+        echo json_encode(["error" => "El lugar seleccionado no existe"]);
+        $stmtLugar->close();
+        $conn->close();
+        exit;
+    }
 }
 
 $stmtLugar->close();

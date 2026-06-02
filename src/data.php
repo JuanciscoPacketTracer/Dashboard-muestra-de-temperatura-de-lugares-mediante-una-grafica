@@ -33,10 +33,23 @@ if (!empty($LOCATION_IDS)) {
     if ($stmt_stats) {
         $stmt_stats->bind_param($locTypes, ...$LOCATION_IDS);
         $stmt_stats->execute();
-        $res_stats = $stmt_stats->get_result();
-
-        while ($row = $res_stats->fetch_assoc()) {
-            $location_stats[] = $row;
+        if (method_exists($stmt_stats, 'get_result')) {
+            $res_stats = $stmt_stats->get_result();
+            if ($res_stats) {
+                while ($row = $res_stats->fetch_assoc()) {
+                    $location_stats[] = $row;
+                }
+            }
+        } else {
+            $stmt_stats->bind_result($nombreLugar, $promedio, $maxTemp, $minTemp);
+            while ($stmt_stats->fetch()) {
+                $location_stats[] = [
+                    'NombreLugar' => $nombreLugar,
+                    'Promedio' => $promedio,
+                    'MaxTemp' => $maxTemp,
+                    'MinTemp' => $minTemp,
+                ];
+            }
         }
         $stmt_stats->close();
     }

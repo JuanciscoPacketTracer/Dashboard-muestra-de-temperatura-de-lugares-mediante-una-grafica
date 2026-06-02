@@ -64,28 +64,43 @@ if (!empty($LOCATION_IDS)) {
     }
 
     $stmt->execute();
-    $resultado = $stmt->get_result();
 
-    if (!$resultado) {
-        http_response_code(500);
-        echo json_encode(['error' => 'Query execution failed: ' . $stmt->error]);
-        $stmt->close();
-        $conn->close();
-        exit;
-    }
+    if (method_exists($stmt, 'get_result')) {
+        $resultado = $stmt->get_result();
 
-    while ($row = $resultado->fetch_assoc()) {
-        $lugar = $row['NombreLugar'];
-        $fecha = $row['Fecha'];
-        $temp  = (float)$row['Temp'];
-
-        if (!isset($series[$lugar])) {
-            $series[$lugar] = [];
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Query execution failed: ' . $stmt->error]);
+            $stmt->close();
+            $conn->close();
+            exit;
         }
-        $series[$lugar][] = ['x' => $fecha, 'y' => $temp];
 
-        if ($latestDate === null || $fecha > $latestDate) {
-            $latestDate = $fecha;
+        while ($row = $resultado->fetch_assoc()) {
+            $lugar = $row['NombreLugar'];
+            $fecha = $row['Fecha'];
+            $temp  = (float)$row['Temp'];
+
+            if (!isset($series[$lugar])) {
+                $series[$lugar] = [];
+            }
+            $series[$lugar][] = ['x' => $fecha, 'y' => $temp];
+
+            if ($latestDate === null || $fecha > $latestDate) {
+                $latestDate = $fecha;
+            }
+        }
+    } else {
+        $stmt->bind_result($lugar, $fecha, $temp);
+        while ($stmt->fetch()) {
+            if (!isset($series[$lugar])) {
+                $series[$lugar] = [];
+            }
+            $series[$lugar][] = ['x' => $fecha, 'y' => (float)$temp];
+
+            if ($latestDate === null || $fecha > $latestDate) {
+                $latestDate = $fecha;
+            }
         }
     }
 
