@@ -2,7 +2,12 @@
 require_once __DIR__ . '/../auth.php';
 roomtemperature_require_login();
 require_once __DIR__ . '/../config/database.php';
-
+if (!isset($conn) || $conn->connect_error) {
+    die(json_encode(['error' => 'DB connection failed', 'msg' => $conn->connect_error ?? 'conn not set']));
+}
+if (empty($LOCATION_IDS)) {
+    error_log('RoomTemperature: LOCATION_IDS is empty — check Temperaturas table has rows and Lugares_IdLugar is populated');
+}
 $sql_count = "SELECT COUNT(*) as Total FROM Temperaturas";
 $res_count = $conn->query($sql_count);
 $total_registros = '0';

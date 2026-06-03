@@ -2,7 +2,12 @@
 require_once __DIR__ . '/auth.php';
 roomtemperature_require_login();
 require_once __DIR__ . '/src/data.php';
-
+echo '<pre style="background:#1e293b;color:#e2e8f0;padding:1rem;font-size:12px;z-index:9999;position:relative">';
+echo 'total_registros: ' . $total_registros . "\n";
+echo 'LOCATION_IDS: ' . json_encode($LOCATION_IDS) . "\n";
+echo 'location_stats count: ' . count($location_stats) . "\n";
+if (!empty($location_stats)) echo 'first stat: ' . json_encode($location_stats[0]) . "\n";
+echo '</pre>';
 $currentUser = roomtemperature_session_user();
 $currentUserName = $currentUser['NombreUsuario'] ?? 'Usuario';
 
