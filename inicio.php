@@ -2,12 +2,7 @@
 require_once __DIR__ . '/auth.php';
 roomtemperature_require_login();
 require_once __DIR__ . '/src/data.php';
-echo '<pre style="background:#1e293b;color:#e2e8f0;padding:1rem;font-size:12px;z-index:9999;position:relative">';
-echo 'total_registros: ' . $total_registros . "\n";
-echo 'LOCATION_IDS: ' . json_encode($LOCATION_IDS) . "\n";
-echo 'location_stats count: ' . count($location_stats) . "\n";
-if (!empty($location_stats)) echo 'first stat: ' . json_encode($location_stats[0]) . "\n";
-echo '</pre>';
+
 $currentUser = roomtemperature_session_user();
 $currentUserName = $currentUser['NombreUsuario'] ?? 'Usuario';
 
@@ -38,7 +33,7 @@ function getTempBadgeClass($temp) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="output.css" rel="stylesheet">
-    <title>Dashboard Temperaturas</title>
+    <title>Dashboard temperaturas</title>
     <link rel="icon" href="images/icono.png" sizes="32x32" type="image/png">
     <script src="src/jquery-3.7.1.min.js"></script>
     <script src="src/apexcharts.min.js"></script>
@@ -75,14 +70,14 @@ function getTempBadgeClass($temp) {
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9l-6-6m0 0L6 9m6-6v18" />
                         </svg>
-                        <span>Usuarios</span>
+                        <span>usuarios</span>
                     </a>
                     <a href="registrolugares.php" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50 text-sm text-slate-300 hover:text-white hover:border-cyan-500/40 transition-colors">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span>Lugares</span>
+                        <span>lugares</span>
                     </a>
                     <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50">
                         <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0"></span>

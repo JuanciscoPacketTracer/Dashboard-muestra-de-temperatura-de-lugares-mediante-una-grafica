@@ -50,7 +50,7 @@ if ($data === null || !isset($data["temperatura"]) || !isset($data["lugar_id"]))
 $temp = (float)$data["temperatura"];
 $lugarId = (int)$data["lugar_id"];
 
-$stmtLugar = $conn->prepare("SELECT NombreLugar FROM Lugares WHERE IdLugar = ? LIMIT 1");
+$stmtLugar = $conn->prepare("SELECT NombreLugar FROM lugares WHERE IdLugar = ? LIMIT 1");
 if (!$stmtLugar) {
     http_response_code(500);
     echo json_encode(["error" => "Location validation failed"]);
@@ -89,8 +89,8 @@ if ($temp < -50 || $temp > 150) {
     $conn->close();
     exit;
 }
-$sql = "INSERT INTO Temperaturas 
-(IdTemperatura, FechaTemperatura, ValorTemperatura, Lugares_IdLugar) 
+$sql = "INSERT INTO temperaturas 
+(IdTemperatura, FechaTemperatura, ValorTemperatura, lugares_IdLugar) 
 VALUES (NULL, NOW(), ?, ?)";
 $stmt = $conn->prepare($sql);
 

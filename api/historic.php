@@ -41,8 +41,8 @@ if (!empty($LOCATION_IDS)) {
             l.NombreLugar, 
             DATE_FORMAT(t.FechaTemperatura, '$dateFormat') AS Fecha, 
             ROUND(AVG(t.ValorTemperatura), 1) AS PromedioTemp
-        FROM Temperaturas t
-        JOIN Lugares l ON t.Lugares_IdLugar = l.IdLugar 
+        FROM temperaturas t
+        JOIN lugares l ON t.lugares_IdLugar = l.IdLugar 
         WHERE l.IdLugar IN ($placeholders)
           AND t.FechaTemperatura >= ?
           AND t.FechaTemperatura <= ?

@@ -6,9 +6,9 @@ if (!isset($conn) || $conn->connect_error) {
     die(json_encode(['error' => 'DB connection failed', 'msg' => $conn->connect_error ?? 'conn not set']));
 }
 if (empty($LOCATION_IDS)) {
-    error_log('RoomTemperature: LOCATION_IDS is empty — check Temperaturas table has rows and Lugares_IdLugar is populated');
+    error_log('RoomTemperature: LOCATION_IDS is empty — check temperaturas table has rows and lugares_IdLugar is populated');
 }
-$sql_count = "SELECT COUNT(*) as Total FROM Temperaturas";
+$sql_count = "SELECT COUNT(*) as Total FROM temperaturas";
 $res_count = $conn->query($sql_count);
 $total_registros = '0';
 if ($res_count) {
@@ -28,8 +28,8 @@ if (!empty($LOCATION_IDS)) {
             ROUND(AVG(t.ValorTemperatura), 1) as Promedio, 
             MAX(t.ValorTemperatura) as MaxTemp,
             MIN(t.ValorTemperatura) as MinTemp
-        FROM Temperaturas t
-        JOIN Lugares l ON t.Lugares_IdLugar = l.IdLugar
+        FROM temperaturas t
+        JOIN lugares l ON t.lugares_IdLugar = l.IdLugar
         WHERE l.IdLugar IN ($placeholders)
         GROUP BY l.IdLugar, l.NombreLugar
     ";

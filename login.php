@@ -300,7 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p>Acceso persistente al tablero después de autenticarte.</p>
                     </div>
                     <div class="auth-stat">
-                        <small>Usuarios</small>
+                        <small>usuarios</small>
                         <p>Valida contra la tabla usuarios.</p>
                     </div>
                     <div class="auth-stat">

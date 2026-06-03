@@ -22,7 +22,7 @@ while True:
         temperatura=round(temperatura,2)
         
         cursor.execute(
-            "INSERT INTO Temperaturas(FechaTemperatura,Lugares_IdLugar,ValorTemperatura) VALUES(%s,%s,%s)",
+            "INSERT INTO temperaturas(FechaTemperatura,lugares_IdLugar,ValorTemperatura) VALUES(%s,%s,%s)",
             (ahora,lugar,temperatura)
         )
         print("Insertado:",ahora,"Lugar:",lugar,"Temp:",temperatura)

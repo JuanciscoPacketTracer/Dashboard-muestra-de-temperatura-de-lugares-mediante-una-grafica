@@ -15,9 +15,9 @@ $conn->set_charset('utf8mb4');
 
 $LOCATION_IDS = [];
 $sqlLocations = "
-    SELECT DISTINCT t.Lugares_IdLugar AS IdLugar
-    FROM Temperaturas t
-    ORDER BY t.Lugares_IdLugar
+    SELECT DISTINCT t.lugares_IdLugar AS IdLugar
+    FROM temperaturas t
+    ORDER BY t.lugares_IdLugar
 ";
 
 $resLocations = $conn->query($sqlLocations);
@@ -26,5 +26,5 @@ if ($resLocations instanceof mysqli_result) {
         $LOCATION_IDS[] = (int)$row['IdLugar'];
     }
 } else {
-    error_log('RoomTemperature warning: could not load LOCATION_IDS from Temperaturas. ' . $conn->error);
+    error_log('RoomTemperature warning: could not load LOCATION_IDS from temperaturas. ' . $conn->error);
 }

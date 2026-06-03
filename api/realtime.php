@@ -19,8 +19,8 @@ if (!empty($LOCATION_IDS)) {
                 l.NombreLugar, 
                 t.FechaTemperatura AS Fecha, 
                 t.ValorTemperatura AS Temp
-            FROM Temperaturas t
-            JOIN Lugares l ON t.Lugares_IdLugar = l.IdLugar 
+            FROM temperaturas t
+            JOIN lugares l ON t.lugares_IdLugar = l.IdLugar 
             WHERE l.IdLugar IN ($placeholders) AND t.FechaTemperatura > ?
             ORDER BY Fecha ASC
         ";
@@ -44,8 +44,8 @@ if (!empty($LOCATION_IDS)) {
                     t.FechaTemperatura AS Fecha, 
                     t.ValorTemperatura AS Temp,
                     ROW_NUMBER() OVER (PARTITION BY l.IdLugar ORDER BY t.FechaTemperatura DESC) AS rn
-                FROM Temperaturas t
-                JOIN Lugares l ON t.Lugares_IdLugar = l.IdLugar 
+                FROM temperaturas t
+                JOIN lugares l ON t.lugares_IdLugar = l.IdLugar 
                 WHERE l.IdLugar IN ($placeholders)
             ) sub
             WHERE rn <= 20
@@ -112,7 +112,7 @@ foreach ($series as $lugar => $data) {
     $apex_series[] = ['name' => $lugar, 'data' => $data];
 }
 
-$sql_count = "SELECT COUNT(*) as Total FROM Temperaturas";
+$sql_count = "SELECT COUNT(*) as Total FROM temperaturas";
 $res_count = $conn->query($sql_count);
 $total_registros = 0;
 if ($res_count) {
