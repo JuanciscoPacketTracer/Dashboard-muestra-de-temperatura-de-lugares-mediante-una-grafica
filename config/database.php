@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "user23060120";
-$password = "rootroot23060120";
+$username = "dashboard";
+$password = "admin123";
 $dbname = "roomtemperaturedb";
 
 // Avoid hard fatals on servers where mysqli is configured to throw exceptions.

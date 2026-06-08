@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/auth.php';
-roomtemperature_require_login();
+// roomtemperature_require_login(); // Removed to allow access from login.php
 ?>
 <!doctype html>
 <html lang="es" class="dark">
@@ -287,8 +287,8 @@ roomtemperature_require_login();
                             <small>Panel administrativo</small>
                             <h2>Registrar usuario</h2>
                         </div>
-                        <a href="inicio.php" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/60 bg-slate-800/60 px-3 py-2 text-sm text-slate-300 hover:text-white hover:border-cyan-500/40 transition-colors">
-                            Volver
+                        <a href="login.php" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/60 bg-slate-800/60 px-3 py-2 text-sm text-slate-300 hover:text-white hover:border-cyan-500/40 transition-colors">
+                            Volver al Login
                         </a>
                     </div>
 

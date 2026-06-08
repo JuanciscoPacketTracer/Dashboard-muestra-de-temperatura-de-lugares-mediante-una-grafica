@@ -3,7 +3,7 @@ import random
 import time
 import math
 from datetime import datetime
-conexion=mysql.connector.connect(host="127.0.0.1",user="root",password="rootroot",database="roomtemperaturedb")
+conexion=mysql.connector.connect(host="127.0.0.1",user="dashboard",password="admin123",database="roomtemperaturedb")
 cursor=conexion.cursor()
 config_lugares = {
     4: {'base': 23, 'amplitud': 4},

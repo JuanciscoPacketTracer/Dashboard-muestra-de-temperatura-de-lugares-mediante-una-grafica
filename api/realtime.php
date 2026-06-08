@@ -5,7 +5,6 @@ roomtemperature_require_login_json();
 require_once __DIR__ . '/../config/database.php';
 
 $since = isset($_GET['since']) ? $_GET['since'] : null;
-
 $series = [];
 $latestDate = null;
 
@@ -20,11 +19,10 @@ if (!empty($LOCATION_IDS)) {
                 t.FechaTemperatura AS Fecha, 
                 t.ValorTemperatura AS Temp
             FROM temperaturas t
-            JOIN lugares l ON t.lugares_IdLugar = l.IdLugar 
+            JOIN lugares l ON t.lugares_IdLugar = l.IdLugar
             WHERE l.IdLugar IN ($placeholders) AND t.FechaTemperatura > ?
             ORDER BY Fecha ASC
         ";
-
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
             http_response_code(500);
@@ -32,26 +30,28 @@ if (!empty($LOCATION_IDS)) {
             $conn->close();
             exit;
         }
-
         $params = array_merge($LOCATION_IDS, [$since]);
         $stmt->bind_param($locTypes . 's', ...$params);
     } else {
+        // UPDATED: Added a time filter to ignore old records.
+        // Since records come every 10 seconds, active sensors will have 
+        // their latest 20 records well within this 1-hour window.
         $sql = "
             SELECT NombreLugar, Fecha, Temp
             FROM (
-                SELECT 
-                    l.NombreLugar, 
-                    t.FechaTemperatura AS Fecha, 
+                SELECT
+                    l.NombreLugar,
+                    t.FechaTemperatura AS Fecha,
                     t.ValorTemperatura AS Temp,
                     ROW_NUMBER() OVER (PARTITION BY l.IdLugar ORDER BY t.FechaTemperatura DESC) AS rn
                 FROM temperaturas t
-                JOIN lugares l ON t.lugares_IdLugar = l.IdLugar 
+                JOIN lugares l ON t.lugares_IdLugar = l.IdLugar
                 WHERE l.IdLugar IN ($placeholders)
+                  AND t.FechaTemperatura >= NOW() - INTERVAL 1 HOUR
             ) sub
             WHERE rn <= 20
             ORDER BY Fecha ASC
         ";
-
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
             http_response_code(500);
@@ -59,7 +59,6 @@ if (!empty($LOCATION_IDS)) {
             $conn->close();
             exit;
         }
-
         $stmt->bind_param($locTypes, ...$LOCATION_IDS);
     }
 
@@ -67,7 +66,6 @@ if (!empty($LOCATION_IDS)) {
 
     if (method_exists($stmt, 'get_result')) {
         $resultado = $stmt->get_result();
-
         if (!$resultado) {
             http_response_code(500);
             echo json_encode(['error' => 'Query execution failed: ' . $stmt->error]);
@@ -75,7 +73,6 @@ if (!empty($LOCATION_IDS)) {
             $conn->close();
             exit;
         }
-
         while ($row = $resultado->fetch_assoc()) {
             $lugar = $row['NombreLugar'];
             $fecha = $row['Fecha'];
@@ -103,7 +100,6 @@ if (!empty($LOCATION_IDS)) {
             }
         }
     }
-
     $stmt->close();
 }
 
