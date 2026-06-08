@@ -2,7 +2,7 @@
 date_default_timezone_set('America/Tijuana');
 $dsn = 'mysql:host=localhost;dbname=roomtemperaturedb';
 $username = 'user23060120';
-$password = 'rootroot123';
+$password = 'rootroot23060120';
 $email = $_POST["email"];
 $pass = $_POST["password"];
 $options = [

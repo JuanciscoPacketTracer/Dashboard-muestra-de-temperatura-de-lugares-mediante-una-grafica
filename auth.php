@@ -12,8 +12,8 @@ function roomtemperature_pdo(): PDO
         return $pdo;
     }
     $dsn = 'mysql:host=localhost;dbname=roomtemperaturedb;charset=utf8mb4';
-    $username = 'user23060120';
-    $password = 'rootroot123';
+    $username = 'dashboard';
+    $password = 'rootroot23060120';
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
